@@ -1,0 +1,18 @@
+import Footer from "@/components/shared/footer";
+import Header from "@/components/shared/header";
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <div className="flex h-screen flex-col">
+      <Header />
+      <main className="mt-28 flex-1 max-w-7xl lg:mx-auto p-5 md:px-10 w-full">
+        {children}
+      </main>
+      <Footer />
+    </div>
+  );
+}
