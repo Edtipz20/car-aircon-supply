@@ -1,5 +1,9 @@
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || "CAS";
 
+export const APP_DESCRIPTION =
+  process.env.NEXT_PUBLIC_APP_DESCRIPTION ||
+  "Genuine automotive AC compressors and aircon parts for your car. Wide model compatibility, competitive prices, fast shipping.";
+
 export const signInDefaultValues = {
   email: "admin@example.com",
   password: "123456",

@@ -4,8 +4,32 @@ import ProductPrice from "@/components/shared/product/product-price";
 import ShippingBadges from "@/components/shared/product/shipping-badges";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { prisma } from "@/db/prisma";
 import { getProductBySlug } from "@/lib/actions/product.action";
 import { notFound } from "next/navigation";
+
+// Metadata
+export async function generateMetadata(props: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await props.params;
+  const product = await prisma.product.findFirst({
+    where: { slug: slug },
+  });
+  return {
+    title: product?.name,
+    description: product?.description,
+    openGraph: {
+      title: product?.name,
+      description: product?.description,
+      images: [product?.images],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: product?.name,
+    },
+  };
+}
 
 const ProductDetailsPage = async (props: {
   params: Promise<{ slug: string }>;

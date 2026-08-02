@@ -17,33 +17,36 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { getCitiesByProvince } from "@/lib/actions/location.action";
+import { getBarangaysByCity } from "@/lib/actions/location.action";
 
-const CitySelect = ({
-  provinceCode,
+const BarangaySelect = ({
+  cityCode,
   value,
   onChange,
 }: {
-  provinceCode?: string;
+  cityCode?: string;
   value: string;
-  onChange: (value: string, code: string) => void;
+  onChange: (value: string) => void;
 }) => {
   const [open, setOpen] = useState(false);
-  const [cities, setCities] = useState<{ code: string; name: string }[]>([]);
+  const [barangays, setBarangays] = useState<{ code: string; name: string }[]>(
+    [],
+  );
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    if (!provinceCode) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setCities([]);
+    if (!cityCode) {
+      startTransition(() => {
+        setBarangays([]);
+      });
       return;
     }
 
     startTransition(async () => {
-      const result = await getCitiesByProvince(provinceCode);
-      setCities(result);
+      const result = await getBarangaysByCity(cityCode);
+      setBarangays(result);
     });
-  }, [provinceCode]);
+  }, [cityCode]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -53,10 +56,10 @@ const CitySelect = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          disabled={!provinceCode}
+          disabled={!cityCode}
           className="w-full h-14 justify-between font-normal"
         >
-          {value || (provinceCode ? "Select city..." : "Select a region first")}
+          {value || (cityCode ? "Select barangay..." : "Select a city first")}
           {isPending ? (
             <Loader className="h-4 w-4 animate-spin opacity-50" />
           ) : (
@@ -66,32 +69,28 @@ const CitySelect = ({
       </PopoverTrigger>
       <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
         <Command>
-          <CommandInput placeholder="Search city..." />
+          <CommandInput placeholder="Search barangay..." />
           <CommandList>
             <CommandEmpty>
-              {isPending ? "Loading..." : "No city found."}
+              {isPending ? "Loading..." : "No barangay found."}
             </CommandEmpty>
             <CommandGroup>
-              {cities.map((city) => (
+              {barangays.map((barangay) => (
                 <CommandItem
-                  key={city.code}
-                  value={city.name}
+                  key={barangay.code}
+                  value={barangay.name}
                   onSelect={(currentValue) => {
-                    if (currentValue === value) {
-                      onChange("", "");
-                    } else {
-                      onChange(currentValue, city.code);
-                    }
+                    onChange(currentValue === value ? "" : currentValue);
                     setOpen(false);
                   }}
                 >
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === city.name ? "opacity-100" : "opacity-0",
+                      value === barangay.name ? "opacity-100" : "opacity-0",
                     )}
                   />
-                  {city.name}
+                  {barangay.name}
                 </CommandItem>
               ))}
             </CommandGroup>
@@ -102,4 +101,4 @@ const CitySelect = ({
   );
 };
 
-export default CitySelect;
+export default BarangaySelect;

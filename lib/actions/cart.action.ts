@@ -159,7 +159,7 @@ export async function addItemToCart(data: z.infer<typeof cartItemSchema>) {
         ? `Quantity updated`
         : `${product.name} added to cart`,
     };
-  } catch (error) {
+  } catch {
     return { success: false, message: "Something went wrong adding to cart" };
   }
 }
@@ -207,7 +207,7 @@ export async function removeItemFromCart(productId: string) {
     if (product) revalidatePath(`/product/${product.slug}`);
 
     return { success: true, message: "Item removed from cart" };
-  } catch (error) {
+  } catch {
     return { success: false, message: "Something went wrong removing item" };
   }
 }
@@ -238,7 +238,7 @@ export async function clearCart() {
 
     revalidatePath("/cart");
     return { success: true, message: "Cart cleared" };
-  } catch (error) {
+  } catch {
     return { success: false, message: "Something went wrong" };
   }
 }

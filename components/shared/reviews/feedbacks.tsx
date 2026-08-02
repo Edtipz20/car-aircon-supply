@@ -10,7 +10,7 @@ const Feedbacks = ({ title }: { title?: string }) => {
   return (
     <div className="w-full mt-10 md:mt-28">
       <h2 className="h2-bold text-center mb-16">
-        <span className="text-primary">// </span>
+        <span className="text-primary">{"//"} </span>
         {title}
       </h2>
       <div className="grid grid-cols-2 md:grid-cols-3 sm:px-5">

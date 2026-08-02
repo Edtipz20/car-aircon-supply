@@ -24,7 +24,7 @@ export const insertProductSchema = z.object({
 
 // Schema for  sign in user
 export const signInFormSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
@@ -47,9 +47,17 @@ export const cartItemSchema = z.object({
   qty: z.number().int().min(1, "Quantity must be at least 1"),
 });
 
+export const paymentMethodSchema = z.object({
+  type: z.literal("CashOnDelivery"),
+});
+
 // Schema for shipping address
 export const shippingAddressSchema = z.object({
   fullName: z.string().min(3, "Name is required"),
+  mobileNumber: z
+    .string()
+    .min(10, "Enter a valid mobile number")
+    .regex(/^(09|\+639)\d{9}$/, "Enter a valid PH mobile number"),
   streetAddress: z.string().min(3, "Address is required"),
   apartment: z.string().optional(),
   barangay: z.string().min(1, "Barangay is required"),
@@ -60,3 +68,22 @@ export const shippingAddressSchema = z.object({
 });
 
 export type ShippingAddress = z.infer<typeof shippingAddressSchema>;
+
+// Schema to update user's profile
+export const updateProfileSchema = z
+  .object({
+    name: z.string().min(3, "Name must be at least 3 characters"),
+    currentPassword: z.string().min(1, "Current password is required"),
+    newPassword: z
+      .string()
+      .min(6, "New password must be at least 6 characters")
+      .optional()
+      .or(z.literal("")),
+    confirmNewPassword: z.string().optional().or(z.literal("")),
+  })
+  .refine(
+    (data) => !data.newPassword || data.newPassword === data.confirmNewPassword,
+    { message: "Passwords do not match", path: ["confirmNewPassword"] },
+  );
+
+export type UpdateProfile = z.infer<typeof updateProfileSchema>;

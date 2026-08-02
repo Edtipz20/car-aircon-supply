@@ -11,7 +11,7 @@ import NavLinks from "./navlinks";
 
 const Menu = () => {
   return (
-    <nav className="sm:hidden sm:py-2">
+    <nav className="lg:hidden sm:py-2">
       <Sheet>
         <SheetTrigger className="align-middle">
           <MenuIcon />

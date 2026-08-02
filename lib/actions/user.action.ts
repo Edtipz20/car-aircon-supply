@@ -1,14 +1,17 @@
 "use server";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import {
+  paymentMethodSchema,
   ShippingAddress,
   shippingAddressSchema,
   signInFormSchema,
   signUpFormSchema,
+  UpdateProfile,
+  updateProfileSchema,
 } from "../validators";
 import { auth, signIn, signOut } from "@/auth";
 import { prisma } from "@/db/prisma";
-import { hashSync } from "bcrypt-ts";
+import { compare, hashSync } from "bcrypt-ts";
 import { ZodError } from "zod";
 
 // Sign in the user with credentials
@@ -112,6 +115,76 @@ export async function updateUserAddress(data: ShippingAddress) {
       return {
         success: false,
         message: error.issues[0]?.message ?? "Invalid address",
+      };
+    }
+    return { success: false, message: "Something went wrong" };
+  }
+}
+
+export async function updateUserPaymentMethod(type: string) {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return { success: false, message: "You must be signed in" };
+    }
+
+    const parsed = paymentMethodSchema.parse({ type });
+
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: { paymentMethod: parsed.type },
+    });
+
+    return { success: true, message: "Payment method saved" };
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return {
+        success: false,
+        message: error.issues[0]?.message ?? "Invalid payment method",
+      };
+    }
+    return { success: false, message: "Something went wrong" };
+  }
+}
+
+export async function updateUserProfile(data: UpdateProfile) {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return { success: false, message: "You must be signed in" };
+    }
+
+    const parsed = updateProfileSchema.parse(data);
+
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+    });
+
+    if (!user || !user.password) {
+      return { success: false, message: "User not found" };
+    }
+
+    const isMatch = await compare(parsed.currentPassword, user.password);
+    if (!isMatch) {
+      return { success: false, message: "Current password is incorrect" };
+    }
+
+    await prisma.user.update({
+      where: { id: session.user.id },
+      data: {
+        name: parsed.name,
+        ...(parsed.newPassword
+          ? { password: hashSync(parsed.newPassword, 10) }
+          : {}),
+      },
+    });
+
+    return { success: true, message: "Profile updated" };
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return {
+        success: false,
+        message: error.issues[0]?.message ?? "Please check your inputs",
       };
     }
     return { success: false, message: "Something went wrong" };

@@ -1,6 +1,11 @@
 import Link from "next/link";
 import { getMyCart } from "@/lib/actions/cart.action";
 import CartTable from "./cart-table";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Cart",
+};
 
 const CartPage = async () => {
   const cart = await getMyCart();

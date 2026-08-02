@@ -12,10 +12,14 @@ import RegionSelect from "@/components/shared/region-select";
 import CitySelect from "@/components/shared/city-select";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Loader, ChevronDown } from "lucide-react";
+import { Loader, Truck } from "lucide-react";
 import { shippingAddressSchema, ShippingAddress } from "@/lib/validators";
-import { updateUserAddress } from "@/lib/actions/user.action";
+import {
+  updateUserAddress,
+  updateUserPaymentMethod,
+} from "@/lib/actions/user.action";
 import { toast } from "sonner";
+import BarangaySelect from "@/components/shared/barangay-select";
 
 type Cart = {
   items: {
@@ -43,11 +47,13 @@ const CheckoutForm = ({
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [provinceCode, setProvinceCode] = useState("");
+  const [cityCode, setCityCode] = useState("");
 
   const form = useForm<ShippingAddress>({
     resolver: zodResolver(shippingAddressSchema),
     defaultValues: existingAddress || {
       fullName: "",
+      mobileNumber: "",
       streetAddress: "",
       apartment: "",
       barangay: "",
@@ -60,12 +66,19 @@ const CheckoutForm = ({
 
   const onSubmit = (data: ShippingAddress) => {
     startTransition(async () => {
-      const res = await updateUserAddress(data);
-      if (!res.success) {
-        toast.error(res.message);
+      const addressRes = await updateUserAddress(data);
+      if (!addressRes.success) {
+        toast.error(addressRes.message);
         return;
       }
-      router.push("/payment-method");
+
+      const paymentRes = await updateUserPaymentMethod("CashOnDelivery");
+      if (!paymentRes.success) {
+        toast.error(paymentRes.message);
+        return;
+      }
+
+      router.push("/place-order");
     });
   };
 
@@ -78,7 +91,7 @@ const CheckoutForm = ({
             <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-sm font-medium">
               {userEmail.charAt(0).toUpperCase()}
             </div>
-            <span className="text-sm font-heading">{userEmail}</span>
+            <span className="font-heading">{userEmail}</span>
           </div>
         </div>
 
@@ -89,7 +102,7 @@ const CheckoutForm = ({
           </Label>
         </div>
 
-        <h2 className="font-bold text-lg mb-4">Delivery</h2>
+        <h2 className="font-bold text-2xl mb-4">Delivery</h2>
 
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
           <div className="space-y-1">
@@ -107,6 +120,27 @@ const CheckoutForm = ({
               </p>
             )}
           </div>
+          {/* Mobile number */}
+          <div className="space-y-1">
+            <Label
+              htmlFor="mobileNumber"
+              className="text-xs text-muted-foreground"
+            >
+              Mobile number
+            </Label>
+            <Input
+              id="mobileNumber"
+              placeholder="09XXXXXXXXX"
+              {...form.register("mobileNumber")}
+              className="h-14"
+            />
+            {form.formState.errors.mobileNumber && (
+              <p className="text-xs text-destructive">
+                {form.formState.errors.mobileNumber.message}
+              </p>
+            )}
+          </div>
+          {/* Address */}
           <div className="space-y-1">
             <Label className="text-xs text-muted-foreground">Region</Label>
             <Controller
@@ -118,7 +152,9 @@ const CheckoutForm = ({
                   onChange={(name, code) => {
                     field.onChange(name);
                     setProvinceCode(code);
-                    form.setValue("city", ""); // clear city when region changes
+                    setCityCode("");
+                    form.setValue("city", "");
+                    form.setValue("barangay", "");
                   }}
                 />
               )}
@@ -140,7 +176,11 @@ const CheckoutForm = ({
                   <CitySelect
                     provinceCode={provinceCode}
                     value={field.value}
-                    onChange={field.onChange}
+                    onChange={(name, code) => {
+                      field.onChange(name);
+                      setCityCode(code);
+                      form.setValue("barangay", "");
+                    }}
                   />
                 )}
               />
@@ -152,16 +192,17 @@ const CheckoutForm = ({
             </div>
 
             <div className="space-y-1">
-              <Label
-                htmlFor="barangay"
-                className="text-xs text-muted-foreground"
-              >
-                Barangay
-              </Label>
-              <Input
-                id="barangay"
-                {...form.register("barangay")}
-                className="h-14 focus-visible:ring focus-visible:ring-accent focus-visible:border-none"
+              <Label className="text-xs text-muted-foreground">Barangay</Label>
+              <Controller
+                name="barangay"
+                control={form.control}
+                render={({ field }) => (
+                  <BarangaySelect
+                    cityCode={cityCode}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
               />
               {form.formState.errors.barangay && (
                 <p className="text-xs text-destructive">
@@ -225,6 +266,21 @@ const CheckoutForm = ({
             )}
           </div>
 
+          <div className="pt-4">
+            <h2 className="font-bold text-lg mb-3">Payment</h2>
+            <div className="border-2 border-accent bg-accent/5 rounded-lg p-4 flex items-center gap-4">
+              <div className="w-9 h-9 rounded-full bg-accent text-white flex items-center justify-center shrink-0">
+                <Truck className="h-4 w-4" />
+              </div>
+              <div>
+                <p className="font-semibold">Cash on Delivery</p>
+                <p className="text-sm text-muted-foreground">
+                  Pay in cash when your order arrives
+                </p>
+              </div>
+            </div>
+          </div>
+
           <Button
             type="submit"
             disabled={isPending}
@@ -233,7 +289,7 @@ const CheckoutForm = ({
             {isPending ? (
               <Loader className="h-4 w-4 animate-spin" />
             ) : (
-              "Continue to Payment"
+              "Continue to Review"
             )}
           </Button>
         </form>

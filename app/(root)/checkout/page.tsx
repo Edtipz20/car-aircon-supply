@@ -3,6 +3,11 @@ import { auth } from "@/auth";
 import { prisma } from "@/db/prisma";
 import { getMyCart } from "@/lib/actions/cart.action";
 import CheckoutForm from "./checkout-form";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Checkout",
+};
 
 const CheckoutPage = async () => {
   const cart = await getMyCart();

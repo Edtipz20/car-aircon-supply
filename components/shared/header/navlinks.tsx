@@ -24,10 +24,13 @@ const NavLinks = ({ className }: { className?: string }) => {
       className={cn("flex justify-between items-center gap-6", className)}
     >
       {links.map(({ label, href }) => (
-        <li key={href} className="cursor-pointer font-bold hover:text-primary">
+        <li
+          key={href}
+          className="cursor-pointer font-bold whitespace-nowrap hover:text-primary"
+        >
           <Link
             href={href}
-            aria-current={pathname === "href" ? "page" : undefined}
+            aria-current={pathname === href ? "page" : undefined}
           >
             {label}
           </Link>

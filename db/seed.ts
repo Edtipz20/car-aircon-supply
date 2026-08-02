@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import "dotenv/config";
 import { prisma } from "./prisma";
 import sampleData from "./sample-data";

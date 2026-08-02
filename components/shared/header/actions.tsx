@@ -6,7 +6,7 @@ import { getMyCart } from "@/lib/actions/cart.action";
 const Actions = async () => {
   const cart = await getMyCart();
   return (
-    <div className="flex gap-6">
+    <div className="relative flex items-center gap-6">
       <Search />
       <CartSheet cart={cart} />
       <UserButton />

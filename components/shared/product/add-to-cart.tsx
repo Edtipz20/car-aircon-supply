@@ -89,7 +89,7 @@ const AddToCart = ({
         return;
       }
 
-      router.push("/cart");
+      router.push("/checkout");
     });
   };
 

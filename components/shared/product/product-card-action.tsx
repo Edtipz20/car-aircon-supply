@@ -1,4 +1,4 @@
-import { Eye, ShoppingCart, Heart, ArrowLeftRight } from "lucide-react";
+import { Eye, ShoppingCart, Heart } from "lucide-react";
 
 const actions = [
   { icon: Eye, label: "Quick View" },

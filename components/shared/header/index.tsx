@@ -5,15 +5,14 @@ import NavLinks from "./navlinks";
 
 const Header = () => {
   return (
-    <header className="w-full bg-background lg:mx-auto px-5 md:px-28 py-1 sm:py-5 fixed z-10">
+    <header className="w-full bg-background lg:mx-auto px-5 md:px-28 py-3 sm:py-5 fixed z-10">
       <div className="flex justify-between items-center">
-        {/* LOGO */}
-        <Logo className="hidden sm:flex" width={80} height={80} />
+        <Logo className="hidden lg:flex" width={80} height={80} />
         <Menu />
-        <nav className="hidden sm:flex">
+        <nav className="hidden lg:flex">
           <NavLinks />
         </nav>
-        <Logo className="sm:hidden" width={40} height={40} />
+        <Logo className="lg:hidden" width={40} height={40} />
         <Actions />
       </div>
     </header>

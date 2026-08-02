@@ -9,6 +9,7 @@ import {
 import { signOutUser } from "@/lib/actions/user.action";
 import { UserIcon } from "lucide-react";
 import Link from "next/link";
+import SignOutItem from "./sign-out-item";
 
 const UserButton = async () => {
   const session = await auth();
@@ -43,18 +44,7 @@ const UserButton = async () => {
             </Link>
           </DropdownMenuItem>
           {session ? (
-            <>
-              <DropdownMenuItem className="rounded-none p-0" asChild>
-                <form action={signOutUser} className="w-full">
-                  <button
-                    type="submit"
-                    className="w-full text-left px-2 py-2 cursor-pointer"
-                  >
-                    Sign Out
-                  </button>
-                </form>
-              </DropdownMenuItem>
-            </>
+            <SignOutItem />
           ) : (
             <DropdownMenuItem className="rounded-none" asChild>
               <Link href="/sign-in" className="w-full py-2 cursor-pointer">
