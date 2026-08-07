@@ -6,7 +6,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { signOutUser } from "@/lib/actions/user.action";
 import { UserIcon } from "lucide-react";
 import Link from "next/link";
 import SignOutItem from "./sign-out-item";
@@ -33,6 +32,13 @@ const UserButton = async () => {
           align="end"
           forceMount
         >
+          {session?.user.role === "admin" && (
+            <DropdownMenuItem className="rounded-none" asChild>
+              <Link href="/admin" className="w-full py-2 cursor-pointer">
+                Admin Dashboard
+              </Link>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem className="rounded-none" asChild>
             <Link href="/user/profile" className="w-full py-2 cursor-pointer">
               My Account
@@ -41,6 +47,11 @@ const UserButton = async () => {
           <DropdownMenuItem className="rounded-none" asChild>
             <Link href="/user/orders" className="w-full py-2 cursor-pointer">
               My Orders
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="rounded-none" asChild>
+            <Link href="/user/wishlist" className="w-full py-2 cursor-pointer">
+              Wishlist
             </Link>
           </DropdownMenuItem>
           {session ? (

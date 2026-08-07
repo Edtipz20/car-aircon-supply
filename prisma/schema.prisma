@@ -22,11 +22,12 @@ model User {
   createdAt     DateTime  @default(now()) @db.Timestamp(6)
   updatedAt     DateTime  @updatedAt
 
-  accounts Account[]
-  sessions Session[]
-  carts    Cart[]
-  orders   Order[]
-  reviews  Review[]
+  accounts      Account[]
+  sessions      Session[]
+  carts         Cart[]
+  orders        Order[]
+  reviews       Review[]
+  wishlistItems WishlistItem[]
 }
 
 model Account {
@@ -84,10 +85,11 @@ model Product {
   banner      String?
   createdAt   DateTime @default(now())
 
-  category   Category    @relation(fields: [categoryId], references: [id])
-  cartItems  CartItem[]
-  orderItems OrderItem[]
-  reviews    Review[]
+  category      Category       @relation(fields: [categoryId], references: [id])
+  cartItems     CartItem[]
+  orderItems    OrderItem[]
+  reviews       Review[]
+  wishlistItems WishlistItem[]
 
   @@index([categoryId])
 }
@@ -105,6 +107,7 @@ model Review {
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
+  @@unique([userId, productId])
   @@index([productId])
 }
 
@@ -176,4 +179,16 @@ model OrderItem {
   product Product @relation(fields: [productId], references: [id])
 
   @@id([orderId, productId])
+}
+
+model WishlistItem {
+  id        String   @id @default(uuid())
+  userId    String
+  productId String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
 }

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Loader, Truck } from "lucide-react";
-import { createOrder } from "@/lib/actions/order.actions";
+import { createOrder } from "@/lib/actions/order.action";
 import { toast } from "sonner";
 import type { ShippingAddress } from "@/lib/validators";
 

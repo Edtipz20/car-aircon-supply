@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { getWishlistProductIds } from "@/lib/actions/wishlist.action";
 import ProductCard from "./product-card";
 
-const ProductList = ({
+const ProductList = async ({
   data,
   title,
   limit,
@@ -10,6 +11,7 @@ const ProductList = ({
   title?: string;
   limit?: number;
 }) => {
+  const wishlistIds = await getWishlistProductIds();
   const limitedData = limit ? data.slice(0, limit) : data;
   return (
     <div className="my-10 px-5 md:px-28 mt-10 md:mt-28">
@@ -20,7 +22,11 @@ const ProductList = ({
       {data.length > 0 ? (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
           {limitedData.map((product: any) => (
-            <ProductCard key={product.slug} product={product} />
+            <ProductCard
+              key={product.slug}
+              product={product}
+              isWishlisted={wishlistIds.has(product.id)}
+            />
           ))}
         </div>
       ) : (

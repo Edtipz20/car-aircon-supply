@@ -44,12 +44,11 @@ const ProductsPage = async (props: {
 
   return (
     <div className="px-5 md:px-28 py-10">
-      <h1 className="h2-bold mb-2">All Products</h1>
-      <p className="text-muted-foreground mb-8">{totalCount} products</p>
-
       <div className="grid grid-cols-1 lg:grid-cols-[220px_1fr] gap-8">
         {/* Filters sidebar */}
         <aside className="space-y-8">
+          <h1 className="h2-bold mb-2">All Products</h1>
+          <p className="text-muted-foreground mb-8">{totalCount} products</p>
           <div>
             <h3 className="font-bold mb-3">Category</h3>
             <ul className="space-y-2 text-sm">
@@ -137,7 +136,7 @@ const ProductsPage = async (props: {
                     page: undefined,
                   })}
                   className={cn(
-                    "px-3 py-1 rounded border",
+                    "px-3 py-1 border",
                     (sort ?? "newest") === opt.value
                       ? "border-accent text-accent"
                       : "border-border text-muted-foreground hover:border-muted-foreground",

@@ -3,22 +3,33 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
 import ProductPrice from "./product-price";
+import ProductCardAction from "./product-card-action";
 
-const ProductCard = ({ product }: { product: any }) => {
+const ProductCard = ({
+  product,
+  isWishlisted = false,
+}: {
+  product: any;
+  isWishlisted?: boolean;
+}) => {
   return (
     <Card className="w-full max-w-sm border-none rounded-none py-0 gap-0 shadow-none hover:shadow-2xl">
-      <CardHeader className="p-0 items-center hover:scale-100">
-        <Link href={`/product/${product.slug}`}>
+      <Link href={`/product/${product.slug}`}>
+        <CardHeader className="relative p-0 items-center group overflow-hidden rounded-none">
           <Image
             src={product.images && product.images[0]}
             alt={product.name}
             width={800}
             height={800}
-            priority={true}
+            className="rounded-none"
           />
-        </Link>
-        {/* <ProductCardAction /> */}
-      </CardHeader>
+          <ProductCardAction
+            productId={product.id}
+            slug={product.slug}
+            initialInWishlist={isWishlisted}
+          />
+        </CardHeader>
+      </Link>
       <CardContent className="px-2 grid justify-center">
         <Link href={`/product/${product.slug}`}>
           <div className="text-xs md:text-base font-bold ">{product.name}</div>

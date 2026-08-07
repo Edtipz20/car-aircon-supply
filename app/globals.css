@@ -1,8 +1,17 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "uploadthing/tw/v4";
 
 @custom-variant dark (&:is(.dark *));
+
+/* Uploadthing config variants */
+@custom-variant ut-button (&:is([data-ut-element="button"]));
+@custom-variant ut-allowed-content (&:is([data-ut-element="allowed-content"]));
+@custom-variant ut-label (&:is([data-ut-element="label"]));
+@custom-variant ut-upload-icon (&:is([data-ut-element="upload-icon"]));
+
+@plugin "@tailwindcss/typography";
 
 @layer utilities {
   .wrapper {
@@ -35,7 +44,7 @@
   --card-foreground: hsl(222.2 84% 4.9%);
   --popover: hsl(0 0% 100%);
   --popover-foreground: hsl(222.2 84% 4.9%);
-  --primary: #081c1e;
+  --primary: hsl(222.2 84% 4.9%);
   --primary-foreground: hsl(210, 34%, 84%);
   --secondary: #f2f6f7;
   --secondary-foreground: hsl(222.2 47.4% 11.2%);
@@ -139,4 +148,12 @@ h6 {
     @apply font-sans;
     scrollbar-gutter: stable;
   }
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, newer Edge */
 }

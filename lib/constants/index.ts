@@ -9,6 +9,8 @@ export const signInDefaultValues = {
   password: "123456",
 };
 
+export const PAGE_SIZE = Number(process.env.PAGE_SIZE) || 2;
+
 export const PH_PROVINCES = [
   "Abra",
   "Agusan del Norte",

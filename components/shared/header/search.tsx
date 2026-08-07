@@ -64,14 +64,14 @@ const Search = () => {
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search our store"
         className={cn(
-          "md:h-15 bg-transparent outline-none text-sm placeholder:text-muted-foreground border-b border-transparent transition-all duration-300 ease-in-out",
+          "md:h-10 bg-transparent outline-none text-sm placeholder:text-muted-foreground rounded-full border-b border-transparent transition-all duration-300 ease-in-out focus-visible:ring focus-visible:ring-accent focus-visible:border-none",
           open ? "w-48 md:w-64 px-2 border-border" : "w-0 px-0",
         )}
       />
       <button
         type="button"
         onClick={handleIconClick}
-        className="text-foreground hover:text-accent shrink-0"
+        className="text-foreground hover:text-accent shrink-0 cursor-pointer"
       >
         <SearchIcon className="h-5 w-5" />
       </button>

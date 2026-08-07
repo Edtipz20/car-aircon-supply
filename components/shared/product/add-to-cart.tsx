@@ -94,7 +94,7 @@ const AddToCart = ({
   };
 
   return (
-    <div className="flex justify-start gap-2">
+    <div className="flex flex-wrap justify-start gap-2">
       <QuantitySelector
         qty={qty}
         onIncrement={handleIncrement}
@@ -104,7 +104,7 @@ const AddToCart = ({
         type="button"
         disabled={isPending}
         onClick={handleAddToCart}
-        className="bg-accent text-white h-15 px-8 hover:text-primary hover:bg-white hover:border-primary cursor-pointer"
+        className="flex-1 min-w-35 bg-accent text-white h-15 px-6 hover:text-primary hover:bg-white hover:border-primary cursor-pointer"
       >
         <ShoppingCart /> Add to cart
       </Button>
@@ -112,7 +112,7 @@ const AddToCart = ({
         type="button"
         disabled={isPending}
         onClick={handleBuyNow}
-        className=" text-white h-15 px-8 hover:text-gray-500 hover:bg-primary cursor-pointer"
+        className="flex-1 min-w-30 text-white h-15 px-6 hover:text-gray-500 hover:bg-primary cursor-pointer"
       >
         Buy it now
       </Button>

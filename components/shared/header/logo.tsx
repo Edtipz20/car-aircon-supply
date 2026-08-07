@@ -9,7 +9,7 @@ const Logo = ({
   height = 60,
   priority = false,
 }: {
-  className: string;
+  className?: string;
   width?: number;
   height?: number;
   priority?: boolean;

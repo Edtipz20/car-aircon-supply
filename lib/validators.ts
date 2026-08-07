@@ -87,3 +87,21 @@ export const updateProfileSchema = z
   );
 
 export type UpdateProfile = z.infer<typeof updateProfileSchema>;
+
+// Schema for Reviews
+export const reviewFormSchema = z.object({
+  productId: z.string().min(1),
+  rating: z.number().int().min(1, "Please select a rating").max(5),
+  title: z.string().min(3, "Title must be at least 3 characters"),
+  description: z.string().min(10, "Review must be at least 10 characters"),
+});
+
+export type ReviewFormValues = z.infer<typeof reviewFormSchema>;
+
+// Schema for category
+export const categorySchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  slug: z.string().min(2, "Slug must be at least 2 characters"),
+});
+
+export type CategoryFormValues = z.infer<typeof categorySchema>;

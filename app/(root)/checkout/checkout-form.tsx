@@ -284,7 +284,7 @@ const CheckoutForm = ({
           <Button
             type="submit"
             disabled={isPending}
-            className="w-full h-14 bg-accent hover:bg-accent-dark text-lg text-white mt-6"
+            className="w-full h-14 bg-accent hover:bg-primary text-lg text-white mt-6 cursor-pointer"
           >
             {isPending ? (
               <Loader className="h-4 w-4 animate-spin" />
@@ -299,7 +299,7 @@ const CheckoutForm = ({
       <div className="bg-muted/40 px-6 md:px-16 py-10">
         <div className="max-h-100 overflow-y-auto space-y-4 pr-2">
           {cart.items.map((item) => (
-            <div key={item.productId} className="flex items-center gap-4">
+            <div key={item.productId} className="flex mt-4 items-center gap-4">
               <div className="relative">
                 <Image
                   src={item.image}

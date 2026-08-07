@@ -4,6 +4,10 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
 import { APP_DESCRIPTION, APP_NAME } from "@/lib/constants";
+import SessionProvider from "@/components/shared/session-provider";
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { extractRouterConfig } from "uploadthing/server";
+import { ourFileRouter } from "@/app/api/uploadthing/core";
 
 const cabin = Cabin({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -32,7 +36,8 @@ export default function RootLayout({
       <body
         className={`${cabin.variable} ${barlowCondensed.variable} font-sans antialiased`}
       >
-        {children}
+        <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
+        <SessionProvider>{children}</SessionProvider>
         <Toaster />
       </body>
     </html>

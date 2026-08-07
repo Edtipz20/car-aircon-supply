@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/card";
 import { Metadata } from "next";
 import CredentialsSignInForm from "./credentials-signin-form";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Sign In",
@@ -23,7 +24,11 @@ const SignInPage = () => {
         </CardDescription>
         <CardContent className="space-y-4">
           {/* Form */}
-          <CredentialsSignInForm />
+          <Suspense
+            fallback={<div className="text-center py-4">Loading form...</div>}
+          >
+            <CredentialsSignInForm />
+          </Suspense>
         </CardContent>
       </Card>
     </div>

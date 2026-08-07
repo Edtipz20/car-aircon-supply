@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { getOrderById } from "@/lib/actions/order.actions";
+import { getOrderById } from "@/lib/actions/order.action";
 import { CheckCircle } from "lucide-react";
 import { Metadata } from "next";
 
